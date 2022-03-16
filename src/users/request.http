@@ -1,11 +1,24 @@
-### Creat User
+### singup 
 POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
+    "email": "test@gmail.com",
     "password": "test"
 }
+
+### signin 
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "test"
+}
+
+### currentuser 
+GET http://localhost:3000/auth/currentuser
+
 
 ### Find a User with given ID
 GET http://localhost:3000/auth/4
