@@ -16,6 +16,10 @@ Content-Type: application/json
     "password": "test"
 }
 
+### signout 
+POST http://localhost:3000/auth/signout
+
+
 ### currentuser 
 GET http://localhost:3000/auth/currentuser
 
