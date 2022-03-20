@@ -1,25 +1,53 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { APP_PIPE } from "@nestjs/core";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "../users/users.module";
 import { ReportsModule } from "../reports/reports.module";
-import { User } from "src/users/user.entity";
-import { Report } from "src/reports/report.entity";
+import { User } from '../users/user.entity';
+import { Report } from "../reports/report.entity";
+const cookieSession = require('cookie-session');
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: "sqlite",
-    database: "db.sqlite",
-    entities: [User, Report],
-    synchronize: true,
-
-  }),
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          type: "sqlite",
+          database: config.get<string>('DB_NAME'),
+          entities: [User, Report],
+          synchronize: true,
+        };
+      }
+    }),
     UsersModule,
     ReportsModule
   ],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+      })
+    }
+  ],
   controllers: [AppController]
 })
 
-export class AppModule { }
+export class AppModule {
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(
+      cookieSession({
+        keys: ["CARS_PLATFORM"],
+      })).forRoutes('*');
+  }
+}
