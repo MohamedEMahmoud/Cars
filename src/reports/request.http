@@ -4,11 +4,23 @@ POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-    "make": "Toyota",
-    "model": "corolla",
-    "milage": 1e3,
-    "year": 1999,
-    "price": 1e4,
-    "lat": 0,
-    "lng": 0
+    "make": "ford",
+    "model": "mustange",
+    "mileage": 5e4,
+    "year": 1994,
+    "price": 20e4,
+    "lat": 45,
+    "lng": 45
 }
+
+### Approved Report
+
+PATCH http://localhost:3000/reports/28
+Content-Type: application/json
+
+{
+    "approved": true
+}
+
+### Get Estimate vehicle
+GET  http://localhost:3000/reports?make=ford&model=mustange&mileage=50000&year=1993&lat=45&lng=45

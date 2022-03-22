@@ -6,7 +6,9 @@ import {
     IsLatitude,
     IsLongitude,
 } from 'class-validator';
-export class CreateReportDto {
+import { Transform } from "class-transformer";
+
+export class GetEstimateDto {
 
     @IsString()
     make: string;
@@ -14,24 +16,23 @@ export class CreateReportDto {
     @IsString()
     model: string;
 
+    @Transform(({value}) => ~~value)
     @IsNumber()
     @Min(0)
     @Max(1e6)
     mileage: number;
 
+    @Transform(({value}) => Number(value))
     @IsNumber()
     @Min(1930)
     @Max(2050)
     year: number;
 
-    @IsNumber()
-    @Min(0)
-    @Max(1e6)
-    price: number;
-
+    @Transform(({value}) => parseFloat(value))
     @IsLatitude()
     lat: number;
-
+    
+    @Transform(({value}) => parseFloat(value))
     @IsLongitude()
     lng: number;
 }

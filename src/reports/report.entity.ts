@@ -14,7 +14,7 @@ export class Report {
     model: string;
 
     @Column()
-    milage: number;
+    mileage: number;
 
     @Column()
     year: number;
@@ -30,4 +30,7 @@ export class Report {
 
     @ManyToOne(() => User, (user) => user.reports)
     user: User;
+
+    @Column({ default: false })
+    approved: boolean;
 }
